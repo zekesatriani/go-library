@@ -23,10 +23,9 @@ type TaskClient struct {
 	proxy       []string
 }
 
-type DBClient struct {
+type TcDbClient struct {
 	IsConnected  bool
 	taskClient   *TaskClient
-	base_url     string
 	dbcon_type   string
 	dbcon_host   string
 	dbcon_port   string
@@ -158,8 +157,8 @@ func (d *TaskClient) exec(url string, data map[string]string) (string, error) {
 }
 
 // ----- >> DB Operation
-func (d *TaskClient) NewDbClient(dbcon_type string, dbcon_host string, dbcon_port string, dbcon_dbname string, dbcon_user string, dbcon_pass string) (DBClient, error) {
-	dbClient := DBClient{}
+func (d *TaskClient) NewDbClient(dbcon_type string, dbcon_host string, dbcon_port string, dbcon_dbname string, dbcon_user string, dbcon_pass string) (TcDbClient, error) {
+	dbClient := TcDbClient{}
 	var final_err error
 
 	dbClient.IsConnected = false
@@ -188,7 +187,7 @@ func (d *TaskClient) NewDbClient(dbcon_type string, dbcon_host string, dbcon_por
 	return dbClient, final_err
 }
 
-func (d *DBClient) GetDatabases() ([]string, error) {
+func (d *TcDbClient) GetDatabases() ([]string, error) {
 	var final_result []string
 	var final_err error
 
@@ -212,7 +211,7 @@ func (d *DBClient) GetDatabases() ([]string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) GetTables() ([]*DbTableInfo, error) {
+func (d *TcDbClient) GetTables() ([]*DbTableInfo, error) {
 	var final_result []*DbTableInfo
 	var final_err error
 
@@ -236,7 +235,7 @@ func (d *DBClient) GetTables() ([]*DbTableInfo, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) GetColumns(dbName string, tableName string) ([]*DbColumnInfo, error) {
+func (d *TcDbClient) GetColumns(dbName string, tableName string) ([]*DbColumnInfo, error) {
 	var final_result []*DbColumnInfo
 	var final_err error
 
@@ -261,7 +260,7 @@ func (d *DBClient) GetColumns(dbName string, tableName string) ([]*DbColumnInfo,
 	return final_result, final_err
 }
 
-func (d *DBClient) Query(asSQL string) ([]map[string]string, error) {
+func (d *TcDbClient) Query(asSQL string) ([]map[string]string, error) {
 	var final_result []map[string]string
 	var final_err error
 
@@ -286,7 +285,7 @@ func (d *DBClient) Query(asSQL string) ([]map[string]string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) GetData(asSQL string) (string, error) {
+func (d *TcDbClient) GetData(asSQL string) (string, error) {
 	var final_result string
 	var final_err error
 
@@ -315,7 +314,7 @@ func (d *DBClient) GetData(asSQL string) (string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) Paging(asSQL string, aiPage int64, aiPageSize int64) (DataPaging, error) {
+func (d *TcDbClient) Paging(asSQL string, aiPage int64, aiPageSize int64) (DataPaging, error) {
 	var final_result DataPaging
 	var final_err error
 
@@ -351,7 +350,7 @@ func (d *DBClient) Paging(asSQL string, aiPage int64, aiPageSize int64) (DataPag
 // 	FirstRowHeaderMapping map[string]string
 // }
 
-func (d *DBClient) DbToExcel(sql string, opt ...ExcelClientWriterOption) (string, error) {
+func (d *TcDbClient) DbToExcel(sql string, opt ...ExcelClientWriterOption) (string, error) {
 	var final_result string
 	var final_err error
 
@@ -419,7 +418,7 @@ func (d *DBClient) DbToExcel(sql string, opt ...ExcelClientWriterOption) (string
 // 	FirstRowHeader   string
 // }
 
-func (d *DBClient) DbToCsv(sql string, opt ...CsvWriterOption) (string, error) {
+func (d *TcDbClient) DbToCsv(sql string, opt ...CsvWriterOption) (string, error) {
 	var final_result string
 	var final_err error
 
@@ -452,7 +451,7 @@ func (d *DBClient) DbToCsv(sql string, opt ...CsvWriterOption) (string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) BulkImport(filename string, destination_table string, row_data_at int64) (string, error) {
+func (d *TcDbClient) BulkImport(filename string, destination_table string, row_data_at int64) (string, error) {
 	var final_result string
 	var final_err error
 
@@ -483,7 +482,7 @@ func (d *DBClient) BulkImport(filename string, destination_table string, row_dat
 	return final_result, final_err
 }
 
-func (d *DBClient) Backup(filename string) (string, error) {
+func (d *TcDbClient) Backup(filename string) (string, error) {
 	var final_result string
 	var final_err error
 
@@ -508,7 +507,7 @@ func (d *DBClient) Backup(filename string) (string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) Restore(filename string) (string, error) {
+func (d *TcDbClient) Restore(filename string) (string, error) {
 	var final_result string
 	var final_err error
 
@@ -533,7 +532,7 @@ func (d *DBClient) Restore(filename string) (string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) TaskList() (map[string]interface{}, error) {
+func (d *TcDbClient) TaskList() (map[string]interface{}, error) {
 	var final_result map[string]interface{}
 	var final_err error
 
@@ -550,7 +549,7 @@ func (d *DBClient) TaskList() (map[string]interface{}, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) TaskStatus(id string) (map[string]string, error) {
+func (d *TcDbClient) TaskStatus(id string) (map[string]string, error) {
 	var final_result map[string]string
 	var final_err error
 
@@ -587,7 +586,7 @@ func (d *DBClient) TaskStatus(id string) (map[string]string, error) {
 	return final_result, final_err
 }
 
-func (d *DBClient) TaskAbort(id string) (string, error) {
+func (d *TcDbClient) TaskAbort(id string) (string, error) {
 	var final_result string
 	var final_err error
 
